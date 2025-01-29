@@ -1,23 +1,47 @@
+import math
+
 class Solution:
     def isValidSudoku(self, board: List[List[str]]) -> bool:
-        rows = collections.defaultdict(set)
-        cols = collections.defaultdict(set)
-        square = collections.defaultdict(set)
+        N = len(board)
+        subgrid_size = int(math.sqrt(N))
         
-        for r in range(9):
-            for c in range(9):
+        rows = [0] * N
+        cols = [0] * N
+        squares = [0] * N
+        
+        for r in range(N):
+            for c in range(N):
                 if board[r][c] == '.':
                     continue
                     
-                if (board[r][c] in rows[r] or board[r][c] in cols[c] or board[r][c] in square[r // 3, c // 3]):
+                num = int(board[r][c]) - 1  # Convert to 0-based index
+                square_index = (r // subgrid_size) * subgrid_size + c // subgrid_size
+                
+                # Check if the number already exists
+                if (rows[r] & (1 << num) or 
+                    cols[c] & (1 << num) or 
+                    squares[square_index] & (1 << num)):
                     return False
                 
-                rows[r].add(board[r][c])
-                cols[c].add(board[r][c])
-                square[(r // 3, c // 3)].add(board[r][c])
+                # Mark the number as present
+                rows[r] |= (1 << num)
+                cols[c] |= (1 << num)
+                squares[square_index] |= (1 << num)
+        
         return True
+
     
     # A way to do it
-    # we just create rows, columns, square dictionaries
-    # rows and column has keys as indeces and values as sets. when we try to access indeces thats not there in the list this creates that index.
-    # square has tuple as index, this is done so that we can map the elements in a subgrid to a index. 
+    # Optimal way to do it using bit manupulation
+    # more efficient than previous solution.
+
+    # Each row, column and square are initially set to zero's
+    # then when we traverse the list of list that represents sudoku row wise we check if a bit is 1 or not if its 1 already when we are checking that means that it is already used. So we return invalid.
+
+    # if its valid in row  then  we search in column if its valid in colum as well then we search it in the square.
+
+    # The first row of sub-grids (top-left to top-right) maps to indices 0, 1, and 2.
+    # The second row of sub-grids maps to indices 3, 4, and 5.
+    # The third row of sub-grids maps to indices 6, 7, and 8.
+
+    # If its not 1 then we set it as 1 using the or operator.
