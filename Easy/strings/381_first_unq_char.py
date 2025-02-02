@@ -6,7 +6,7 @@ class Solution:
                 unseen_hash[elem] = 1
             else:
                 unseen_hash[elem] += 1 
-        for elm, val in unseen_hash.items():
-            if val == 1:
-                return s.index(elm)
+        for ind, elm in enumerate(s):
+            if unseen_hash[elem] == 1:
+                return ind
         return -1
