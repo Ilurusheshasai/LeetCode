@@ -7,6 +7,6 @@ class Solution:
             else:
                 unseen_hash[elem] += 1 
         for ind, elm in enumerate(s):
-            if unseen_hash[elem] == 1:
+            if unseen_hash[elm] == 1:
                 return ind
         return -1
