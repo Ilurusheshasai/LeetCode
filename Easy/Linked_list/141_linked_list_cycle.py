@@ -6,20 +6,21 @@
 
 class Solution:
     def hasCycle(self, head: Optional[ListNode]) -> bool:
-        seen = set()
-
-        while head:
-            if head not in seen:
-                seen.add(head)
-                head = head.next
-            else:
+        fast = head
+        slow = head
+        while fast and fast.next:
+            fast = fast.next.next
+            slow = slow.next
+            
+            if fast == slow:
                 return True
-        return False
+        return False        
     
-# this is one of the approach this 
-# it uses hashing technique to store the address of the node
-# the point is when we reach the same node again next time signifes the point that we are in a loop, we can find the adress in the hash set.
-# this way we can identify the cycle.
+# this is the best approach  
+# it uses fast-slow technique (floyd cycle test) to check if there is a loop
+# the point is fast and slow pointers chase each other till they meet.
 
-# time complexity - O(n) --> we must loop trough entire list +1 to reach a same node, if there is no loop them we see null and we return false.
-# Space complexity - O(n) --> as we are using a separate set to store the addresses of the elements
+# time complexity - O(n) --> we must loop trough entire list +1 to reach a same node, if there is no loop then we see fast reaching null first and we return false.
+# Space complexity - O(1) --> as we are not using any separate datastructure to store.
+
+# See other commits for other solutions
