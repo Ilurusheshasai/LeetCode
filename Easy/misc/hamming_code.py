@@ -7,3 +7,5 @@ class Solution:
             n = n//2
 
         return count
+    
+# time complexity - O(logn)
