@@ -1,23 +1,10 @@
 class Solution:
     def hammingDistance(self, x: int, y: int) -> int:
+        xor = x ^ y  #xor will have 1's at the positions where bits are different
         count = 0
-        while x != y:
-            if x%2 != y%2:
-                count += 1
-            x = x//2
-            y = y//2 
+        while xor: # Count the number of 1's in xor using Brian Kernighan's algorithm, which identifies the rightmost 1-bit in a number and clears it.
+            xor &= xor - 1  # Clear the least-significant 1-bit
+            count += 1
         return count
-    
-"""
-Weaknesses
-Inefficiency:
 
-Time Complexity: O(max(log(x), log(y))), where log(x) represents the number of bits in x. The algorithm iterates until x and y become equal, which requires O(log(max(x,y))) iterations in the worst case. For numbers like x = 8 (1000), y = 0, it requires 4 iterations instead of directly checking only the differing bits.
-
-Slower Operations: Uses division (//) and modulo (%), which are computationally slower than bitwise operations.
-
-Fails for Negative Numbers:
-
-In Python, // rounds toward negative infinity, causing infinite loops for negative inputs (e.g., x = -1, y = 0).
-
-"""
+# Time complexity: O(k), where k is the number of bits in the input
